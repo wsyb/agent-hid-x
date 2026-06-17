@@ -1,0 +1,82 @@
+keymap:
+  # ═══════════════════════════════════════════════════
+  # 设备: 英菲克 M9 无线鼠标
+  # 连接: 2.4G USB
+  # 注意: BTN_SIDE / BTN_EXTRA 是鼠标侧键
+  # ═══════════════════════════════════════════════════
+
+  - name: "[鼠标] 侧键 → 切换桌面"
+    remap:
+      BTN_SIDE: C-Super-Right
+      BTN_EXTRA: C-Super-Left
+
+  - name: "[鼠标] Ctrl+侧键 → 翻页"
+    remap:
+      C-BTN_SIDE: C-PageDown
+      C-BTN_EXTRA: C-PageUp
+
+  - name: "[鼠标] Alt+侧键 → 前进后退"
+    remap:
+      A-BTN_SIDE: A-Right
+      A-BTN_EXTRA: A-Left
+
+  # ═══════════════════════════════════════════════════
+  # 设备: XING WEI 迷你键盘
+  # 连接: 2.4G USB
+  # 注意: 全部用 Code_NNN 格式，键名由 key_detector.py 测出
+  # ═══════════════════════════════════════════════════
+
+  # --- 圆盘四键（围绕OK键）---
+  - name: "[键盘] 音量+ → Ctrl+PgUp"
+    remap:
+      Code_115: C-PageUp
+  - name: "[键盘] 音量- → Ctrl+PgDn"
+    remap:
+      Code_114: C-PageDown
+  - name: "[键盘] 上一曲 → Ctrl+Win+Left"
+    remap:
+      Code_165: C-Super-Left
+  - name: "[键盘] 下一曲 → Ctrl+Win+Right"
+    remap:
+      Code_163: C-Super-Right
+
+  # --- 左侧竖排三键 ---
+  - name: "[键盘] 左侧① → Win+J"
+    remap:
+      Code_171: Super-J
+  - name: "[键盘] 左侧② 邮件 → Ctrl+J"
+    remap:
+      Code_155: C-J
+  - name: "[键盘] 左侧③ 静音 → Ctrl+C"
+    remap:
+      Code_113: C-C
+
+  # --- 右侧竖排三键 ---
+  - name: "[键盘] 右侧① 搜索 → Shift+Tab"
+    remap:
+      Code_217: Shift-Tab
+  - name: "[键盘] 右侧② 主页 → Ctrl+T"
+    remap:
+      Code_172: C-T
+  - name: "[键盘] 右侧③ WWW → Ctrl+W"
+    remap:
+      Code_150: C-W
+
+modmap:
+  # ═══════════════════════════════════════════════════
+  # 鼠标中键：按住 = Right Ctrl
+  # ═══════════════════════════════════════════════════
+  - name: "[鼠标] 中键按住 → Right Ctrl"
+    remap:
+      BTN_MIDDLE:
+        press: [{ press: Ctrl_R }]
+        release: [{ release: Ctrl_R }]
+
+  # ═══════════════════════════════════════════════════
+  # 迷你键盘 OK 键：按住 = Right Ctrl
+  # ═══════════════════════════════════════════════════
+  - name: "[键盘] OK键按住 → Right Ctrl"
+    remap:
+      Code_164:
+        press: [{ press: Ctrl_R }]
+        release: [{ release: Ctrl_R }]
