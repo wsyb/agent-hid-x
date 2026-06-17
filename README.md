@@ -4,7 +4,7 @@
 
 **跨平台支持**：
 - **Linux**：使用 xremap（evdev/uinput）
-- **Windows**：使用 AutoHotkey v2（AHK 配置位于 `windows/` 目录下）
+- **Windows**：使用 AutoHotkey v2（配置位于 `windows/config.ahk`，键位与 Linux 版一致）
 
 ## 设计目标
 
@@ -245,6 +245,49 @@ rm -f ~/.config/systemd/user/xremap.service
 sudo rm -f /etc/sudoers.d/xremap
 systemctl --user daemon-reload
 ```
+### Windows 安装
+
+本项目的 Windows 配置通过 AutoHotkey v2 实现。
+
+#### 前置依赖
+
+1. 下载安装 [AutoHotkey v2](https://www.autohotkey.com/download/ahk-v2.exe)
+2. 验证安装：在资源管理器中双击任意 `.ahk` 文件，应能正常启动
+
+> 安装后 `.ahk` 文件会自动关联 `AutoHotkey64.exe`，无需手动配置 PATH。
+
+#### 使用方法
+
+直接在资源管理器中**双击** `windows\config.ahk` 即可后台运行（托盘区会出现 AHK 图标）。
+
+如果需要命令行方式：
+
+```bash
+# 前台运行（调试用）
+AutoHotkey64.exe windows\config.ahk
+```
+
+#### 开机自启
+
+1. 按 `Win+R`，输入 `shell:startup`，回车
+2. 创建 `config.ahk` 的快捷方式放入启动文件夹
+3. 或新建 `config.ahk.lnk`，目标填写：`"C:\Program Files\AutoHotkey\v2\AutoHotkey64.exe" "D:\path\to\agent-hid-x\windows\config.ahk"`
+
+#### 按键检测
+
+如果接入新设备或需要调试按键，使用附带的检测工具：
+
+```bash
+AutoHotkey64.exe windows\key_detector.ahk
+```
+
+会弹出一个窗口，实时显示按键的 VK / SC 码和 WM_APPCOMMAND 消息，可用于确认设备发哪个键、对应哪个标识符。
+
+#### 注意事项
+
+- AHK 脚本不拦截原始输入，**不独占设备**，不影响其他键的正常使用
+- AHK 的映射**只在 Windows GUI 会话中生效**，远程桌面（RDP）或 WinPE 环境下不生效
+- 如果与游戏或全屏应用的按键冲突，可右键托盘图标 → Suspend Hotkeys 临时暂停
 
 ## 如何适配新设备
 
@@ -273,11 +316,12 @@ systemctl --user start xremap
 ```
 agent-hid-x/
   ├── README.md
-  ├── config.yml         # Linux (xremap)
+  ├── config.yml              # Linux (xremap)
   ├── windows/
-  │   └── config.ahk     # Windows (AutoHotkey v2)
+  │   ├── config.ahk          # Windows (AutoHotkey v2) — 主映射
+  │   └── key_detector.ahk    # Windows 按键检测工具
   ├── scripts/
-  │   └── key_detector.py
+  │   └── key_detector.py     # Linux 按键检测工具
   └── systemd/
       └── install.sh
 ```
