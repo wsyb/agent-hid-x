@@ -26,7 +26,10 @@
    >
    > "把鼠标 X1（后退侧键）的映射改成 Ctrl+Shift+Esc"
 
-   模型会修改 `config.yml` 并重启服务。
+   模型会根据你的系统选择对应的配置：
+
+    - **Linux**：修改 `config.yml`，然后重启 xremap 服务
+    - **Windows**：修改 `windows/config.ahk`，然后右键托盘图标 → Reload This Script
 
 **无需手动编辑配置文件。**
 
@@ -291,7 +294,9 @@ AutoHotkey64.exe windows\key_detector.ahk
 
 ## 如何适配新设备
 
-不要猜测按键名称。使用附带的检测工具：
+不要猜测按键名称，使用附带的检测工具。
+
+### Linux（xremap）
 
 ```bash
 # 1. 停掉 xremap（独占输入设备）
@@ -310,6 +315,22 @@ systemctl --user start xremap
 
 **永远使用 `Code_NNN` 格式**（如 `Code_171: Super-J`），不要猜测按键名字。
 检测器会显示精确的 code，数字索引不存在歧义。
+
+### Windows（AutoHotkey v2）
+
+```bash
+# 1. 运行检测工具
+AutoHotkey64.exe windows\key_detector.ahk
+
+# 2. 弹窗会实时显示按键的 VK / SC 码和 WM_APPCOMMAND 消息
+#    按下一个键，记录它对应的按键标识符
+
+# 3. 编辑 windows\config.ahk，添加或修改映射：
+#    标准键名格式：XButton1::Send("^#{Right}")
+#    媒体键格式：  Volume_Up::Send("^{PgUp}")
+
+# 4. 右键托盘图标 → Reload This Script 重载配置
+```
 
 ## 项目结构
 
@@ -364,6 +385,25 @@ xremap --list-devices
 ### 按键映射不对
 
 使用 `key_detector.py` 重新检测设备实际发送的 code，然后用 `Code_NNN` 格式写配置。
+
+---
+
+### Windows 常见问题
+
+#### AHK 脚本未生效
+
+1. 检查系统托盘是否有 AutoHotkey 图标（绿色背景的 `H`）
+2. 若没有，手动双击 `windows\config.ahk` 启动
+3. 若图标在但映射无效，右键图标 → **Reload This Script**
+4. 若脚本报错，右键图标 → **Open** → 查看 AHK 弹出的错误信息
+
+#### 按键冲突
+
+右键托盘图标 → **Suspend Hotkeys** 可临时暂停所有映射，再次点击恢复。
+
+#### 如何查看按键编码
+
+运行 `windows\key_detector.ahk`，按目标键，弹窗会显示 VK / SC 码和消息类型。可用于确认设备实际发送的是哪个按键。
 
 ## 许可
 
