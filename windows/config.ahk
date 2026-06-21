@@ -11,23 +11,18 @@ SendMode "Input"
 
 ; ==================== 1. 鼠标映射 ====================
 
-; --- Ctrl + 滚轮：翻页 ---
-$^WheelDown::Send("{Blind}{PgDn}")
-$^WheelUp::Send("{Blind}{PgUp}")
+; --- 侧键：按下时实时判断修饰键，支持按住 Ctrl 连续点击 ---
+$*XButton1::HandleXButton("Right", "PgDn")
+$*XButton2::HandleXButton("Left", "PgUp")
 
-; --- Alt + 侧键：浏览器前进/后退（支持长按连续） ---
-$!XButton1::
+HandleXButton(direction, pageKey)
 {
-    Send("{Blind}{Alt down}{Right down}")
-    KeyWait("XButton1")
-    Send("{Blind}{Right up}")
-}
-
-$!XButton2::
-{
-    Send("{Blind}{Alt down}{Left down}")
-    KeyWait("XButton2")
-    Send("{Blind}{Left up}")
+    if GetKeyState("Alt", "P")
+        Send("{Blind}!{" direction "}")
+    else if GetKeyState("Ctrl", "P")
+        Send("{Blind}{" pageKey "}")
+    else
+        Send("{Blind}^#{" direction "}")
 }
 
 ; --- Win + 左键：任务视图（Win+Tab） ---
